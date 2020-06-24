@@ -52,8 +52,17 @@ class organization(requestObject):
         for results in json_response['noteTypes']:
             self.noteTypes[results["name"]] = results['id']
 
+    def coral_id(self, coralID):
+        headers = {'Content-Type': 'application/json', 'x-okapi-tenant': self.tenant, 'x-okapi-token': self.token}
+        r_url = f'{self.url}erm/sas?filters=customProperties.CoralIdentifier.value=={coralID}'
+        response = requests.get(r_url, headers=headers,timeout= .5 )
+        self.agreement = json.loads(response.text)[0]
+
+
+
+
+
 if __name__ == '__main__':
-    x = organization('https://okapi-fivecolleges.folio.ebsco.com/', 'tenant')
-    x.getToken('userName', 'Password')
-    print (x.token)
-    x.get_orgs('UM')
+    x = open("credentials.json", "r")
+    credentials = json.load(x)
+
