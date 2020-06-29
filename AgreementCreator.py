@@ -61,32 +61,6 @@ class agreement():
         }, indent = 4)
 
 
-class note(folio_api.requestObject):
-
-    def __init__(self, requestObject, type, title, content, coralID, linkID):
-        requestObject.__init__(self, requestObject)
-        self.domain = 'agreements'
-        self.title = title
-        self.content=content
-        self.links = None
-        self.type = type
-        self.coralID = coralID
-
-
-
-
-
-
-
-    def typeGetter(self,typeObject):
-        self.typeID = typeObject.get(self.type)
-
-    def serialize(self):
-        return json.dumps(self, default=lambda o : o.__dict__)
-
-
-
-
 
 if __name__ == "__main__":
     x = open("credentials.json", "r")
@@ -94,20 +68,17 @@ if __name__ == "__main__":
     print (credentials)
     orgObject = folio_api.organization( credentials['URL'], credentials['tenant'])
     orgObject.getToken(credentials['userName'], credentials['password'])
-    orgObject.coral_id(1)
-    print (orgObject.agreement["id"])
-
-    # orgObject.get_orgs('UM')
-    # orgObject.get_noteTypes()
-    # with open ("orgs/Coral/agreements/umResources3.csv" ,"r", encoding='utf8') as coralResource:
-    #     coralDict = DictReader(coralResource)
-    #     for row in coralDict:
-    #         workingAgreement = agreement(coralID = row['resourceID'],
-    #                                      orgCode = row['orgCode'],
-    #                                      name = row['titleText'],
-    #                                      description = row['descriptionText'],
-    #                                      startDate = row['currentStartDate'],
-    #                                      endDate = row['currentEndDate'],
-    #                                      periodNote = "order#: " +row["orderNumber"] + ", system#: " + row['systemNumber'])
-    #         workingAgreement.orgGetter(orgObject.org_key)
-    #         print (workingAgreement.serialize())
+    orgObject.get_orgs('UM')
+    orgObject.get_noteTypes()
+    with open ("orgs/Coral/agreements/umResources3.csv" ,"r", encoding='utf8') as coralResource:
+         coralDict = DictReader(coralResource)
+         for row in coralDict:
+             workingAgreement = agreement(coralID = row['resourceID'],
+                                          orgCode = row['orgCode'],
+                                          name = row['titleText'],
+                                          description = row['descriptionText'],
+                                          startDate = row['currentStartDate'],
+                                          endDate = row['currentEndDate'],
+                                          periodNote = "order#: " +row["orderNumber"] + ", system#: " + row['systemNumber'])
+             workingAgreement.orgGetter(orgObject.org_key)
+             print (workingAgreement.serialize())
