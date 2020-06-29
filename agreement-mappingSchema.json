@@ -1,0 +1,240 @@
+# agreement mapping schema
+# This represents my best effort to reverse engineer the agreements schema
+#The stated goal is to provide a mapping for data from coral and instructions for constants
+# This is  not technically a valid json schema for the purposes of validation 
+	"agreement" : {
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description" : "mappping from coral to Agreements",
+	"type": "object",
+	"properties" : { 
+	
+	"tags":{
+		"type": "array",
+		"description":"will have hardcoded tag value to indicate batch load",
+		"items": {
+				"type": "object",
+				"ref" : "tag"}},
+	"periods": {
+
+		"id": "periods",
+		"type": "array",
+		"description" : "list containing the period object",
+		"items":{
+		"ref": "period",
+		"type": "object",
+		"description": "will only migrate active period from coral"
+		},
+	},
+
+	"name": {
+		"type":"string",
+		"description": "Title of resource",
+		"mapping": "titleText"},
+
+	"customProperties": {
+		"type" : "object",
+		"description" : "additional properties for an agreement.  Displays as 'supplemental properties' in UI - should be an array",
+		"properties": {
+				"type": "array",
+				"description": "?",
+				"items": { 
+						 	"type": "object",
+						 	"description" : "?",
+						 	"ref": "customProp"
+								}
+							}
+						},
+		"agreementStatus": {
+			"type": "object",
+			"properties":{
+				"id":{
+					"type": "string",
+					"description": "uuid"
+					},
+				"value":{
+					"type": "string",
+					"description": " normalized name of agreement status.  Will always be 'active' from coral export",
+					"enum": ["active", "draft", "trial", "closed"]
+				},
+				"label": {
+					"type":"string",
+					"description": "human readable text for status will always be 'Active' from coral export ",
+					"enum": ["Active", "Draft", "Trial", "Closed"]}
+				}
+			},
+
+		"orgs":{
+			"type":"array",
+			"items":{
+				"id": {
+				"type": "string",
+				"description": "uuid of the org object? "},
+
+				"org":{
+					"type": "object",
+					"description": "org Object",
+				"ref": "org"},
+						
+				"role": {
+					"type":"object",
+					"properties": {
+							"id":{
+								"type":"string",
+								"description" "uuid of the reference value"},
+							"value": {
+								"type":"string",
+								"description": "system normalized text",
+								"mapping": "coral export will always use 'vendor' " ,
+								"enum":["vendor", "platform", "provider", "licensing", "consortium"]},
+							"label":{
+								"type" : "string",
+								"description": "human readable label",
+								"mapping" : "coral export will always use 'Vendor' ",
+								"enum": ["Vendor", "Platform", "Provider", "Licensing", "Consortium"]}}}
+
+							}
+						}
+					}
+				},
+				
+
+					
+	
+
+
+{"tag" : {
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "Tags that can be attached to various objects",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "The UUID of this tag",
+      "type": "string",
+      "$ref": "raml-util/schemas/uuid.schema"
+    },
+    "label": {
+      "description": "The short label of this tag - Harcoded value 'schoolCode - Batch loaded' ",
+      "type": "string"
+    },
+    "description": {
+      "description": "The description of this tag Harcoded value 'schoolCode - Batch loaded'",
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "$ref": "raml-util/schemas/metadata.schema"
+    }
+  },
+  "required": [
+    "label"
+  ]
+}},
+
+{"period":  {
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"startDate" : {
+			"description": "start date of the agreement",
+			"type": "dateTime",
+			"mapping": "currentStartDate"
+						},
+
+			"endDate" : {
+			"description": "start date of the agreement",
+			"type": "dateTime",
+			"mapping": "currentEndDate"
+						},
+
+			"periodNote": {
+				"description" : "free text for note description",
+					"type" : "string",
+					"mapping": "at UMASS may be \"order#: \" +row[\"orderNumber\"] + \", system#: \" + row['systemNumber'])"}
+						}
+
+	}
+
+
+},
+
+{"type": {
+				"type" : "object",
+				"properties": {
+
+				"id": {
+				"type": "string",
+				"description" : " the unique identifier for the property "},
+				"name": {"type" : "string",
+						"description" : "system name for the property",
+					"enum": ["externalId"]},
+					"primary": {
+						"type" : "boolean",
+						"description" : "is the property primary?"
+					}
+					,
+					"defaultInternal":{
+						"type": "boolean",
+						"description" : "the default setting for whether this is an external or internal property"
+					},
+
+					"label": {
+						"type":"string",
+						"description" : "name of property that will appear to user",
+						"enum": ["External ID"]
+					},
+					"type" : {
+						"type" : "string",
+						"description" : "the data type of the value",
+						"mapping" : "external agreement could be an int or string"
+						}	 
+					} 
+	}
+},
+{"customProp": {
+	"description": "Eseentially a different one exists for every supplemental property, although the structure is the same.  We will only create 'External ID'",
+		"properties" : {
+							"value": {
+								"description" : "the data stored in the custom property - 5c will only be mapping the coral ID",
+								"type" : "type is determined by the 'type' value of the type-type ",
+									"mapping": "coralID"},
+							"id": {
+								"type" : "string",
+								"description": "sequentially created unique identifer for the object.  Unique to the app. WHy isn't this a UUID? "
+								  },
+							"note": {
+								"type": "string",
+								"description" : "free text note field- we will hardcode 'coral identifer' for coral and 'noteId' for externally generated csvs"},
+							"publicNote": {
+								"type": "string",
+								"description" : "another note, might have some functionality to display to the public?"},
+							"type":{ 
+			 					"type":"object",
+			 					"description" : "information and constraints for the external id object",
+			 					"ref": "type"},
+			 				"internal":{
+			 					"type": "boolean",
+			 					"description":"wild guess- determines whether the property displays to the public.  I bet this functionality doesn't exist"}
+			 					}
+			 				}
+			 			}
+{"org":{
+					"type": "object",
+					"description": "org Object",
+					"properties": {
+						"id":{
+						"type" : "string",
+						"description" : " the UUID of the org in the erm storage"},
+
+						"orgsUuid":{
+							"type": "string",
+							"description" : "the uuuid of the org",
+							"mapping":"orgCode can be provided by coral and looked up in Folio"},
+						"name":{
+								"type" : "string",
+								"description" : "name of organization- Name is required for a post in addition ro orgsUidid",
+								"mapping": "orgCode- best option is to pull the name from folio along with the orgsUuid"}}
+							}
+						}
+
+
