@@ -1,4 +1,6 @@
-SELECT r.titleText, rn.resourceID, case
+SELECT 
+-- r.titleText, 
+concat( "UM", rn.resourceID) as externalID, nt.shortName as noteTitle, case
 					  when rn.noteTypeID = 17 then "Accessibility"
                       when rn.NoteTypeID = 3 then "Access Details"
                       when rn.NoteTypeID = 2 then "Acquisition Details"
@@ -10,7 +12,7 @@ SELECT r.titleText, rn.resourceID, case
                       when rn.NoteTypeId = 12 then "SFX"
                       else rn.NoteTypeID
                       end as "note Type",
-rn.noteText
+replace(replace(rn.noteText, '\n', ' '), ',', '; ') as noteText
 
 FROM coral_resources.ResourceNote rn
 INNER JOIN coral_resources.NoteType nt
