@@ -3,8 +3,9 @@ import json
 import requests
 
 class note(requestObject):
-
-
+    def __init__(self, url, tenant):
+        super(note,self).__init__(url,tenant)
+        self.agreement = None
 
     def typeGetter(self,typeObject):
         self.typeID = typeObject.get(self.type)
@@ -13,7 +14,10 @@ class note(requestObject):
         headers = {'Content-Type': 'application/json', 'x-okapi-tenant': self.tenant, 'x-okapi-token': self.token}
         r_url = f'{self.url}erm/sas?filters=customProperties.coralID.value=={coralID}'
         response = requests.get(r_url, headers=headers,timeout= .5 )
-        self.agreement = json.loads(response.text)[0]
+        try:
+            self.agreement = json.loads(response.text)[0]
+        except IndexError:
+            print (f"{coralID} is not valid")
 
     def get_noteTypes(self):
         if self.token is None:
@@ -37,5 +41,5 @@ if __name__ == "__main__":
     credentials = json.load(credfile)
     noteObject= note(credentials['URL'], credentials['tenant'])
     noteObject.getToken(credentials['userName'], credentials["password"])
-    noteObject.coral_id(3)
-    print (noteObject.agreement)
+    noteObject.coral_id("UM9999")
+    print (json.dumps(noteObject.agreement, indent=4))
