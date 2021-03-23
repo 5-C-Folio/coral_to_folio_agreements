@@ -1,8 +1,7 @@
 from folio_api import organization, requestObject
 import json
 import requests
-#the most important part of this script requires that a custom property be created with the key from coral.  This will be used as the match point to assign the notes
-#this will output a json file with a note, notetype and the agreement custom propery match point
+#demonstrates that it is possible to find a note based on custom property in Folio
 class note(requestObject):
     def __init__(self, url, tenant):
         super(note,self).__init__(url,tenant)
@@ -44,6 +43,6 @@ if __name__ == "__main__":
     credentials = json.load(credfile)
     noteObject= note(credentials['URL'], credentials['tenant'])
     noteObject.getToken(credentials['userName'], credentials["password"])
-  
+    #outputs an agreement based on a coral id
     noteObject.coral_id("UM9999")
     print (json.dumps(noteObject.agreement, indent=4))
