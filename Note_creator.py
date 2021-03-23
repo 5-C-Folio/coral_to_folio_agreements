@@ -44,6 +44,6 @@ if __name__ == "__main__":
     credentials = json.load(credfile)
     noteObject= note(credentials['URL'], credentials['tenant'])
     noteObject.getToken(credentials['userName'], credentials["password"])
-    #I cannot remember what this line is supposed to do
+  
     noteObject.coral_id("UM9999")
     print (json.dumps(noteObject.agreement, indent=4))
