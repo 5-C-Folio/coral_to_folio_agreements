@@ -2,6 +2,7 @@ from folio_api import organization, requestObject
 import json
 import requests
 #the most important part of this script requires that a custom property be created with the key from coral.  This will be used as the match point to assign the notes
+#this will output a json file with a note, notetype and the agreement custom propery match point
 class note(requestObject):
     def __init__(self, url, tenant):
         super(note,self).__init__(url,tenant)
