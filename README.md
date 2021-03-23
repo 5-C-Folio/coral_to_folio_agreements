@@ -28,3 +28,4 @@ and is far more complicated in structure than it needs to be to do what it has t
 3)  I am not a developer and my understanding of object oriented programing is pretty low
 4)  It was customized for the way Coral data is used in the three 5C servers.  It will require adaptation by anyone else
 5) Notecreator.py was a proof of concept that we could attach Coral notes to Folio agreements.  It was a success, but NoteCreator will not work
+6) The agreements data model elements used are over a year old.  Changes to model have not been accounted for
