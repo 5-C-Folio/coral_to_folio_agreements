@@ -15,6 +15,7 @@ def string_to_dict(string):
     return altList
 
 class agreement():
+    #class for agreement
     def __init__(self,**kwargs):
 
         self.coralID = None
@@ -32,18 +33,20 @@ class agreement():
         self.__dict__.update(kwargs)
 
     def orgGetter(self, orgObject):
-        # query the org object for a uuid
+        # query the org object for a uuid. this includes hardcoded values for the shool in question. query must be customized
         self.org = {"org": {"orgsUuid": orgObject.get("UM" + self.orgCode)}, "role": "content_provider"}
         self.orgs.append(self.org)
 
 
     def serialize(self):
+        #define period start dates , and end date if exists
         if self.endDate is not None and len(self.endDate) > 1:
             self.periods.append({"startDate": datetime.strptime(self.startDate,"%m/%d/%Y"), "endDate": self.endDate.date()})
         else:
             self.periods.append({"startDate": str(datetime.strptime(self.startDate,"%m/%d/%Y").isoformat()), "note": self.periodNote})
 
         if self.alias is not None:
+            #aliases are stored in CSV as a single cell delinated by a character.  this will change to key value pair
             self.alias = string_to_dict(self.alias)
 
         self.id = str(uuid4())
@@ -64,12 +67,14 @@ class agreement():
 
 if __name__ == "__main__":
     x = open("credentials.json", "r")
+    #read credentials to connect to folio to get org data and note types
     credentials = json.load(x)
     print (credentials)
     orgObject = folio_api.organization( credentials['URL'], credentials['tenant'])
     orgObject.getToken(credentials['userName'], credentials['password'])
     orgObject.get_orgs('UM')
     orgObject.get_noteTypes()
+    #this is the csv with coral data, and attach the org data.  5c had two soruces of org data
     with open ("orgs/Coral/agreements/umResources3.csv" ,"r", encoding='utf8') as coralResource:
          coralDict = DictReader(coralResource)
          for row in coralDict:
