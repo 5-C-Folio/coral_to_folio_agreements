@@ -23,8 +23,8 @@ Sql queries were customized for each schools specifications and how they used Co
 8) execute program
 
 ## Known issues
-1)  This was intended to be a program used exclusively by me, for a one off task.  It doesn't have enough comments, too many hardcoded values,  
+1)  This was intended to be a program used exclusively by me, for a one off task.  It doesn't have enough comments,too many hardcoded values,  
 and is far more complicated in structure than it needs to be to do what it has to do
 3)  I am not a developer and my understanding of object oriented programing is pretty low
-4)  It was customized for the way Coral data is set up in the three 5C servers that use that data.  It will require adaptation by anyone else
+4)  It was customized for the way Coral data is used in the three 5C servers.  It will require adaptation by anyone else
 5) Notecreator.py was a proof of concept that we could attach Coral notes to Folio agreements.  It was a success, but NoteCreator will not work
